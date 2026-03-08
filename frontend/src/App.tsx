@@ -1,35 +1,65 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import teamData from "./CollegeBasketballTeams.json";
+import "./App.css";
 
-function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+interface TeamCardProps {
+  school: string;
+  name: string;
+  city: string;
+  state:string;
 }
 
-export default App
+interface Team extends TeamCardProps {
+  tid: number;
+}
+
+function Header() {
+  return(
+    <header className="header">
+      <h1>College Basketball Teams</h1>
+      <p>
+        Browse the complete directory of college basketball programs 
+        across the nation.<br />
+        Each card shows the school name, mascot, and location.
+      </p>
+    </header>
+  );
+}
+
+function TeamCard({ school, name, city, state }: TeamCardProps) {
+  return (
+    <div className="team-card">
+      <h2>{school}</h2>
+      <p className="mascot">{name || "N/A"}</p>
+      <p className="location">
+        {city}, {state}
+      </p>
+    </div>
+  );
+}
+
+function TeamList({ teams }: { teams: Team[] }) {
+  return (
+    <div className="team-list">
+      {teams.map((team) => (
+        <TeamCard
+          key={team.tid}
+          school={team.school}
+          name={team.name}
+          city={team.city}
+          state={team.state}
+        />
+      ))}
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <div className="app">
+      <Header />
+      <TeamList teams={teamData.teams} />
+    </div>
+  );
+}
+
+export default App;
